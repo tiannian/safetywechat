@@ -1,7 +1,7 @@
 pub mod jssdk;
 pub mod messages;
 
-use crate::accesstoken::AccessTokenIns;
+use crate::core::accesstoken::AccessTokenIns;
 use crate::cache::Cache;
 use crate::config;
 use jssdk::Jssdk;

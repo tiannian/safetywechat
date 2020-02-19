@@ -1,6 +1,6 @@
 use std::convert::From;
 use std::string::ToString;
-use crate::accesstoken::AccessTokenBody;
+use crate::core::accesstoken::AccessTokenBody;
 use crate::official_account::jssdk::JsapiTicketBody;
 
 #[derive(Debug)]
