@@ -3,6 +3,9 @@ name = "safetywechat"
 version = "0.1.0"
 authors = ["tiannian <dtiannian@aliyun.com>"]
 edition = "2018"
+description = "A Wechat Public Platfrom SDK for Rust. [Inprocessing]"
+license-file = "LICENSE"
+repository = "https://github.com/tiannian/safetywechat/"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
