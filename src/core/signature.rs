@@ -1,5 +1,5 @@
 use serde::{ Serialize, Deserialize };
-use crate::config::OfficialAccount;
+use crate::config::WechatBase;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Signature {
@@ -10,7 +10,7 @@ pub struct Signature {
 }
 
 impl Signature {
-    pub fn validate(self, config: OfficialAccount) -> Option<String> {
+    pub fn validate(self, config: WechatBase) -> Option<String> {
         let mut tmp_array = vec![self.nonce, self.timestamp, config.token];
         tmp_array.sort();
         let tmp_str = format!("{}{}{}",tmp_array[0], tmp_array[1], tmp_array[2]);

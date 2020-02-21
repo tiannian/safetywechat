@@ -19,6 +19,11 @@ hex = "0.4.1"
 sha1 = { version = "0.6.0", features = ["std"] }
 serde_json = "1.0"
 tokio = { version = "0.2", features = ["full"] }
+quick-xml = { version = "0.17.2", features = ["serialize"] }
+bytes = "0.5.4"
+base64 = "0.11.0"
+block-modes = "0.3.3"
+aes-soft = "0.3.3"
 
 [dev-dependencies]
 warp = "0.2"

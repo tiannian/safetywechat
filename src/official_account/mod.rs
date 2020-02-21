@@ -1,5 +1,7 @@
 pub mod jssdk;
-pub mod messages;
+pub mod server;
+
+pub use server::Server;
 
 use crate::core::accesstoken::AccessTokenIns;
 use crate::cache::Cache;
@@ -7,12 +9,12 @@ use crate::config;
 use jssdk::Jssdk;
 
 pub struct OfficialAccount<C: Cache> {
-    config: config::OfficialAccount,
+    config: config::WechatBase,
     cache: C,
 }
 
 impl<C: Cache> OfficialAccount<C> {
-    pub fn new(cache: C, config: config::OfficialAccount) -> Self {
+    pub fn new(cache: C, config: config::WechatBase) -> Self {
         OfficialAccount::<C> {
             cache,
             config,
@@ -20,11 +22,11 @@ impl<C: Cache> OfficialAccount<C> {
     }
 
     pub fn accesstoken(&mut self) -> AccessTokenIns<C> {
-        AccessTokenIns::new(self.cache.clone(), self.config.base.clone())
+        AccessTokenIns::new(self.cache.clone(), self.config.clone())
     }
 
     pub fn jssdk(&mut self) -> Jssdk<C> {
-        Jssdk::new(self.cache.clone(), self.config.base.clone(), self.accesstoken())
+        Jssdk::new(self.cache.clone(), self.config.clone(), self.accesstoken())
     }
 }
 
@@ -98,15 +100,11 @@ mod tests {
         }
     }
 
-    #[tokio::test]
+   // #[tokio::test]
     async fn test_oa() {
-        let base = config::WechatBase {
+        let config = config::WechatBase {
             app_id: "wx5a3dbaf21ec95f39".to_string(),
             secret: "4c3e8320e3ea6b5b3a1d4878b40664d7".to_string(),
-        };
-
-        let config = config::OfficialAccount {
-            base,
             token: "".to_string(),
             aes_key: "".to_string(),
         };
