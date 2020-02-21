@@ -15,6 +15,7 @@ pub enum Error {
     Base64DecodeError(base64::DecodeError),
     CryptoAESBlockError(block_modes::BlockModeError),
     XMLParseError(quick_xml::DeError),
+    JsonParseError(serde_json::Error),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
@@ -40,6 +41,12 @@ impl From<block_modes::BlockModeError> for Error {
 impl From<quick_xml::DeError> for Error {
     fn from(e: quick_xml::DeError) -> Self {
         Error::XMLParseError(e)
+    }
+}
+
+impl From<serde_json::Error> for Error {
+    fn from(e: serde_json::Error) -> Self {
+        Error::JsonParseError(e)
     }
 }
 

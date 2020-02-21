@@ -1,10 +1,9 @@
 use warp::{ Filter };
 use safetywechat::core::signature::Signature;
-use safetywechat::core::message::EncryptedMessage;
 use safetywechat::config::WechatBase;
 use safetywechat::core::message::Query;
-
-use std::convert::AsRef;
+use safetywechat::config::{ MessageFormat, EncryptMode };
+use safetywechat::core::server::Server;
 
 #[tokio::main]
 async fn main() {
@@ -15,7 +14,9 @@ async fn main() {
                 app_id: String::from("wx5a3dbaf21ec95f39"),
                 secret: String::from("4c3e8320e3ea6b5b3a1d4878b40664d7"),
                 token: String::from("abcdefgh"),
-                aes_key: String::new()
+                aes_key: Some(String::new()),
+                msg_type: MessageFormat::XML,
+                encrypt_mode: EncryptMode::Plaintext,
             };
             println!("{:?}", sign);
             let result = sign.validate(config.clone());
@@ -34,14 +35,13 @@ async fn main() {
                 app_id: String::from("wx5a3dbaf21ec95f39"),
                 secret: String::from("4c3e8320e3ea6b5b3a1d4878b40664d7"),
                 token: String::from("abcdefgh"),
-                aes_key: String::from("2Ytb9xgNNs72AvD3W60iY3qFX9w4qgKWurto47l2Kfw"),
+                aes_key: Some(String::from("2Ytb9xgNNs72AvD3W60iY3qFX9w4qgKWurto47l2Kfw")),
+                msg_type: MessageFormat::Json,
+                encrypt_mode: EncryptMode::Encrypted,
             };
-            let data = Vec::from(bytes.as_ref());
-            let s = String::from_utf8(data).unwrap();
-            let message_body: EncryptedMessage = quick_xml::de::from_str(&s).unwrap();
-            let message = message_body.decrypt(query, config).unwrap();
-            // println!("{:?}", query);
-            println!("{:?}", message);
+            let server = Server::new(config);
+            let r = server.parse_input(query, bytes);
+            println!("{:?}", r);
             String::new()
         });
 
