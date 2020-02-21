@@ -1,6 +1,6 @@
 use crate::cache::Cache;
 use crate::config::WechatBase;
-use crate::core::accesstoken::AccessTokenIns;
+use crate::core::AccessToken;
 use crate::Result;
 use serde::{ Serialize, Deserialize };
 use crate::error::Error;
@@ -35,15 +35,15 @@ pub struct JsapiTicket {
     pub expires_in: u32,
 }
 
-pub struct Jssdk<C: Cache> {
+pub struct Jssdk<'a, C: Cache> {
     pub ticket: Option<JsapiTicket>,
-    cache: C,
-    config: WechatBase,
-    access_token: AccessTokenIns<C>,
+    cache: &'a C,
+    config: &'a WechatBase,
+    access_token: &'a AccessToken<'a, C>,
 }
 
-impl<C: Cache> Jssdk<C> {
-    pub fn new(cache: C, config: WechatBase, access_token: AccessTokenIns<C>) -> Self {
+impl<'a, C: Cache> Jssdk<'a, C> {
+    pub fn new(cache: &'a C, config: &'a WechatBase, access_token: &'a AccessToken<'a, C>) -> Self {
         Jssdk {
             ticket: None,
             cache,

@@ -40,7 +40,7 @@ async fn main() {
                 encrypt_mode: EncryptMode::Encrypted,
             };
             let server = Server::new(config);
-            let r = server.parse_input(query, bytes);
+            let r = server.input(query, bytes);
             println!("{:?}", r);
             String::new()
         });

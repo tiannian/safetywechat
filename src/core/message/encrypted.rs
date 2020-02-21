@@ -50,7 +50,7 @@ impl EncryptedMessage {
         }
     }
 
-    fn decrypt_data(&self, data: &String, key: String, appid_len: usize) -> Result<String> {
+    fn decrypt_data(&self, data: &String, key: &String, appid_len: usize) -> Result<String> {
         let mut base64_data = base64::decode(data)?;
         let bin_key = base64::decode(&format!("{}=", key)).unwrap();
         let cipher = Aes256Cbc::new_var(&bin_key, &bin_key[..16]).unwrap();
@@ -65,13 +65,14 @@ impl EncryptedMessage {
     pub fn decrypt(&self, query: Query, config: &WechatBase) -> Result<String> {
         if query.msg_signature.is_some() {
             let signature = query.msg_signature.unwrap();
-            let aes_key = config.aes_key.clone().unwrap();
             self.validate_signature(signature, 
                                     self.data.clone(), 
                                     config.token.clone(), 
                                     query.timestamp.unwrap().to_string(), 
                                     query.nonce.unwrap())?;
-            self.decrypt_data(&self.data, aes_key, config.app_id.len())
+            self.decrypt_data(&self.data,
+                              config.aes_key.as_ref().unwrap(), 
+                              config.app_id.len())
         } else {
             Err(Error::MessageKeyError("lose `msg_signature`".to_string()))
         }

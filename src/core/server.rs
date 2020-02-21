@@ -4,12 +4,12 @@ use crate::core::message::{ Message, EncryptedMessage, ReceivedMessage, Query };
 use crate::config::{ EncryptMode, MessageFormat };
 use crate::Result;
 
-pub struct Server {
-    config: WechatBase,
+pub struct Server<'a> {
+    config: &'a WechatBase,
 }
 
-impl Server {
-    pub fn new(config: WechatBase) -> Self {
+impl<'a> Server<'a> {
+    pub fn new(config: &'a WechatBase) -> Self {
         Server {
             config,
         }
@@ -39,7 +39,7 @@ impl Server {
         received_data.get_message()
     }
 
-    pub fn parse_input(&self, query: Query, bytes: Bytes) -> Result<Message> {
+    pub fn input(&self, query: Query, bytes: Bytes) -> Result<Message> {
         let data = String::from_utf8(Vec::from(bytes.as_ref())).unwrap();
         match (&self.config.msg_type, &self.config.encrypt_mode) {
             (MessageFormat::XML,  EncryptMode::Encrypted)  => self.parse_xml_encrypted(query, data),

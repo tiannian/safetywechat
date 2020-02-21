@@ -14,27 +14,27 @@ pub struct AccessTokenBody {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct AccessToken {
+pub struct AccessTokenValue {
     pub access_token: String,
     pub expires_in: u32,
 }
 
-pub struct AccessTokenIns<C: Cache> {
-    pub access_token: Option<AccessToken>,
-    cache: C,
-    config: WechatBase,
+pub struct AccessToken<'a, C: Cache> {
+    pub access_token: Option<AccessTokenValue>,
+    cache: &'a C,
+    config: &'a WechatBase,
 }
 
-impl<C: Cache> AccessTokenIns<C> {
-    pub fn new(cache: C, config: WechatBase) -> Self {
-        AccessTokenIns::<C> {
+impl<'a, C: Cache> AccessToken<'a, C> {
+    pub fn new(cache: &'a C, config: &'a WechatBase) -> Self {
+        AccessToken::<C> {
             access_token: None,
             config,
             cache,
         }
     }
 
-    pub async fn update_token(&mut self) -> Result<AccessToken> {
+    pub async fn update_token(&self) -> Result<AccessTokenValue> {
         let url = format!("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={}&secret={}", 
                           self.config.app_id, self.config.secret);
         let at = reqwest::get(&url).await?
@@ -43,7 +43,7 @@ impl<C: Cache> AccessTokenIns<C> {
 
         match at.access_token {
             Some(token) => {
-                let atd = AccessToken {
+                let atd = AccessTokenValue {
                     access_token: token,
                     expires_in: at.expires_in.unwrap(),
                 };
@@ -57,7 +57,7 @@ impl<C: Cache> AccessTokenIns<C> {
         }
     }
 
-    pub async fn get_token(&mut self) -> Result<AccessToken> {
+    pub async fn get_token(&self) -> Result<AccessTokenValue> {
         let key = format!("accesstoken-{}", self.config.app_id);
         match self.cache.get(&key).await? {
             Some(token) => Ok(token),
