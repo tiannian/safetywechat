@@ -19,14 +19,14 @@ pub struct AccessTokenValue {
     pub expires_in: u32,
 }
 
-pub struct AccessToken<'a, C: Cache> {
+pub struct AccessToken<C: Cache> {
     pub access_token: Option<AccessTokenValue>,
-    cache: &'a C,
-    config: &'a WechatBase,
+    cache: C,
+    config: WechatBase,
 }
 
-impl<'a, C: Cache> AccessToken<'a, C> {
-    pub fn new(cache: &'a C, config: &'a WechatBase) -> Self {
+impl<C: Cache> AccessToken<C> {
+    pub fn new(cache: C, config: WechatBase) -> Self {
         AccessToken::<C> {
             access_token: None,
             config,

@@ -35,15 +35,15 @@ pub struct JsapiTicket {
     pub expires_in: u32,
 }
 
-pub struct Jssdk<'a, C: Cache> {
+pub struct Jssdk<C: Cache> {
     pub ticket: Option<JsapiTicket>,
-    cache: &'a C,
-    config: &'a WechatBase,
-    access_token: &'a AccessToken<'a, C>,
+    cache: C,
+    config: WechatBase,
+    access_token: AccessToken<C>,
 }
 
-impl<'a, C: Cache> Jssdk<'a, C> {
-    pub fn new(cache: &'a C, config: &'a WechatBase, access_token: &'a AccessToken<'a, C>) -> Self {
+impl<C: Cache> Jssdk<C> {
+    pub fn new(cache: C, config: WechatBase, access_token: AccessToken<C>) -> Self {
         Jssdk {
             ticket: None,
             cache,

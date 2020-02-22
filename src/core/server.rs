@@ -1,15 +1,17 @@
 use crate::config::WechatBase;
 use bytes::Bytes;
-use crate::core::message::{ Message, EncryptedMessage, ReceivedMessage, Query };
+use crate::core::message::{ Message, EncryptedMessage, ReceivedMessage };
 use crate::config::{ EncryptMode, MessageFormat };
 use crate::Result;
+use crate::core::Query;
 
-pub struct Server<'a> {
-    config: &'a WechatBase,
+#[derive(Clone)]
+pub struct Server {
+    config: WechatBase,
 }
 
-impl<'a> Server<'a> {
-    pub fn new(config: &'a WechatBase) -> Self {
+impl Server {
+    pub fn new(config: WechatBase) -> Self {
         Server {
             config,
         }
@@ -48,6 +50,13 @@ impl<'a> Server<'a> {
             (MessageFormat::Json, EncryptMode::Hybrid)     => Self::parse_json(data),
             (MessageFormat::XML,  EncryptMode::Plaintext)  => Self::parse_xml(data),
             (MessageFormat::Json, EncryptMode::Plaintext)  => Self::parse_json(data),
+        }
+    }
+
+    pub fn validate(&self, query: Query) -> Result<String> {
+        match query.validate(&self.config) {
+            Some(non) => Ok(non),
+            None => Ok(String::new())
         }
     }
 }

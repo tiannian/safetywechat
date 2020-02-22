@@ -1,9 +1,7 @@
 pub mod jssdk;
-mod modules;
 mod official_account;
 
 pub use jssdk::Jssdk;
-pub use modules::Modules;
 pub use official_account::OfficialAccount;
 
 /* #[cfg(test)] */

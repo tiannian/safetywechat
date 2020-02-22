@@ -1,5 +1,4 @@
 use serde::{ Serialize, Deserialize };
-use crate::core::message::ReceivedMessage;
 use crate::Result;
 use crate::error::Error;
 use crate::config::WechatBase;
@@ -7,16 +6,9 @@ use std::string::ToString;
 use block_modes::{ BlockMode, Cbc };
 use block_modes::block_padding::Pkcs7;
 use aes_soft::Aes256;
+use crate::core::Query;
 
 type Aes256Cbc = Cbc<Aes256, Pkcs7>;
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct Query {
-    timestamp: Option<i64>,
-    nonce: Option<String>,
-    encrypt_type: Option<String>,
-    msg_signature: Option<String>
-}
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct EncryptedMessage {
@@ -63,7 +55,7 @@ impl EncryptedMessage {
 
     /// Decrypt data. If aes_key error, it will panic.
     pub fn decrypt(&self, query: Query, config: &WechatBase) -> Result<String> {
-        if query.msg_signature.is_some() {
+        if query.signature.is_some() {
             let signature = query.msg_signature.unwrap();
             self.validate_signature(signature, 
                                     self.data.clone(), 

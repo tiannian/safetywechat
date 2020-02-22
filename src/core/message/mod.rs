@@ -10,6 +10,5 @@ pub use message::Location;
 pub use message::Link;
 pub use message::Message;
 pub use receive::ReceivedMessage;
-pub use encrypted::Query;
 pub use encrypted::EncryptedMessage;
 
