@@ -2,7 +2,7 @@ use serde::{ Serialize, Deserialize };
 
 use crate::error::Error;
 use crate::Result;
-use crate::core::message::{ Message, Text, Image, Voice, Video, Location, Link };
+use crate::core::message::{ Message };
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ReceivedMessage {
@@ -57,17 +57,17 @@ fn default_vx() -> Option<String> {
 }
 
 macro_rules! message_body_convert {
-    ( $s:expr, $e:ident, $t:ident, $( $x:ident => $y:ident ), * ) => {
+    ( $s:expr, $e:ident, $( $x:ident => $y:ident ), * ) => {
         {
             if true
                 $(
                     && $s.$y.is_some()
                  )+ {
-                    Ok( Message::$e( $t {
+                    Ok( Message::$e {
                         $(
                             $x: $s.$y.unwrap(),
                             )*
-                    } ) )
+                    }  )
                 } else {
                     let info = String::from("lose field(s): ")
                         + $( &format!("{} => {:?}; ", stringify!($x), $s.$y) + )* "";
@@ -80,13 +80,13 @@ macro_rules! message_body_convert {
 impl ReceivedMessage {
     pub fn get_message(self) -> Result<Message> {
         match self.t.as_str() {
-            "text" => message_body_convert!(self, Text, Text, text => text),
-            "image" => message_body_convert!(self, Image, Image, url => url, media_id => media_id),
-            "voice" => message_body_convert!(self, Voice, Voice, format => format, media_id => media_id),
-            "video" => message_body_convert!(self, Video, Video, thumb_id => thumb_id, media_id => media_id, title => _v1, description => _v2),
-            "shortvideo" => message_body_convert!(self, ShortVideo, Video, thumb_id => thumb_id, media_id => media_id, title => _v1, description => _v2),
-            "location" => message_body_convert!(self, Location, Location, x => x, y => y, scale=>scale, label => text),
-            "link" => message_body_convert!(self, Link, Link, title => format, description => text, url => url),
+            "text" => message_body_convert!(self, Text, text => text),
+            "image" => message_body_convert!(self, Image, url => url, media_id => media_id),
+            "voice" => message_body_convert!(self, Voice, format => format, media_id => media_id),
+            "video" => message_body_convert!(self, Video, thumb_id => thumb_id, media_id => media_id, title => _v1, description => _v2),
+            "shortvideo" => message_body_convert!(self, ShortVideo, thumb_id => thumb_id, media_id => media_id, title => _v1, description => _v2),
+            "location" => message_body_convert!(self, Location, x => x, y => y, scale=>scale, label => text),
+            "link" => message_body_convert!(self, Link, title => format, description => text, url => url),
             _ => Err(Error::UnknownMessageType(self.t)),
         }
     }

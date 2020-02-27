@@ -3,64 +3,59 @@ use serde::{ Serialize, Deserialize };
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum Message {
     Empty,
-    Text(Text),
-    Image(Image),
-    Voice(Voice),
-    Video(Video),
-    ShortVideo(Video),
-    Location(Location),
-    Link(Link),
-    Music(Music),
-    News,
-}
+    Text {
+        text: String,
+    },
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct Text {
-    pub text: String,
-}
+    Image {
+        url: String,
+        media_id: String,
+    },
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct Image {
-    pub url: String,
-    pub media_id: String,
-}
+    Voice {
+        media_id: String,
+        format: String,
+    },
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Voice {
-    pub media_id: String,
-    pub format: String,
-}
+    Video {
+        media_id: String,
+        thumb_id: String,
+        title: String,
+        description: String,
+    },
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Video {
-    pub media_id: String,
-    pub thumb_id: String,
-    pub title: String,
-    pub description: String,
-}
+    ShortVideo {
+        media_id: String,
+        thumb_id: String,
+        title: String,
+        description: String,
+    },
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct Link {
-    pub title: String,
-    pub description: String,
-    pub url: String,
-}
+    Location {
+        x: f64,
+        y: f64,
+        scale: u64,
+        label: String,
+    },
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Location {
-    pub x: f64,
-    pub y: f64,
-    pub scale: u64,
-    pub label: String,
-}
+    Link {
+        title: String,
+        description: String,
+        url: String,
+    },
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Music {
-    pub title: String,
-    pub description: String,
-    pub url: String,
-    pub hq_url: String,
-    pub thumb_id: String
+    Music {
+        title: String,
+        description: String,
+        url: String,
+        hq_url: String,
+        thumb_id: String
+    },
+
+    News {
+        count: u64,
+        news: Vec<New>,
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -69,11 +64,5 @@ pub struct New {
     pub description: String,
     pub pic_url: String,
     pub url: String,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct News {
-    pub count: u64,
-    pub news: Vec<New>,
 }
 
