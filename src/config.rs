@@ -27,11 +27,19 @@ impl Default for EncryptMode {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum PlatformType {
+    OfficialAccount,
+    OpenPlatfrom,
+    MiniProgram,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct WechatBase{
     pub app_id:  String,
     pub secret:  String,
     pub token:   String,
     pub aes_key: Option<String>,
+    pub t: PlatformType,
     #[serde(default)]
     pub msg_type: MessageFormat,
     #[serde(default)]
@@ -40,5 +48,5 @@ pub struct WechatBase{
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Config {
-    offical_account: Vec<WechatBase>,
+    configs: Vec<WechatBase>,
 }

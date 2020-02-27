@@ -1,7 +1,8 @@
 use serde::{ Serialize, Deserialize };
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum Message {
+    Empty,
     Text(Text),
     Image(Image),
     Voice(Voice),
@@ -10,6 +11,7 @@ pub enum Message {
     Location(Location),
     Link(Link),
     Music(Music),
+    News,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -60,3 +62,18 @@ pub struct Music {
     pub hq_url: String,
     pub thumb_id: String
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct New {
+    pub title: String,
+    pub description: String,
+    pub pic_url: String,
+    pub url: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct News {
+    pub count: u64,
+    pub news: Vec<New>,
+}
+

@@ -3,7 +3,7 @@ extern crate async_trait;
 
 use warp::{ Filter };
 use safetywechat::config::WechatBase;
-use safetywechat::config::{ MessageFormat, EncryptMode };
+use safetywechat::config::{ MessageFormat, EncryptMode, PlatformType };
 use safetywechat::core::Query;
 use safetywechat::official_account::OfficialAccount;
 use safetywechat::cache::Cache;
@@ -83,6 +83,7 @@ async fn main() {
         aes_key: Some(String::from("2Ytb9xgNNs72AvD3W60iY3qFX9w4qgKWurto47l2Kfw")),
         msg_type: MessageFormat::XML,
         encrypt_mode: EncryptMode::Plaintext,
+        t: PlatformType::OfficialAccount,
     };
 
     let cache = TestCache::default();
