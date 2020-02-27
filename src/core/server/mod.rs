@@ -1,5 +1,5 @@
 mod server;
-mod helper;
+pub mod helper;
 
 pub use server::Server;
 

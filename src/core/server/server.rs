@@ -90,6 +90,7 @@ impl Server {
     pub fn output(self, message: Message) -> Result<String> {
         match self.config.t {
             PlatformType::OfficialAccount => self.output_official_account(message),
+            // TODO: Add more platform support.
             _ => Ok(String::new())
         }
     }

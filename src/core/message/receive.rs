@@ -133,7 +133,7 @@ mod tests {
             <Format><![CDATA[Format]]></Format>
             <MsgId>1234567890123456</MsgId>
         </xml>";
-        let r_voice: MessageBody = from_str(voice)?;
+        let r_voice: ReceivedMessage = from_str(voice)?;
         println!("Voice: {:?}", r_voice.get_message());
         Ok(())
     }

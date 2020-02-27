@@ -95,22 +95,22 @@ async fn main() {
             server1.validate(query).unwrap()
         });
 
-    let message = warp::body::content_length_limit(1024 * 32)
-        .and(warp::query::query())
-        .and(warp::body::bytes())
-        .map(move |query: Query, bytes: bytes::Bytes| {
-            let da = server2.input(query, bytes);
-            println!("{:?}", da);
-            String::new()
-        });
+/*     let message = warp::body::content_length_limit(1024 * 32) */
+    //     .and(warp::query::query())
+    //     .and(warp::body::bytes())
+    //     .map(move |query: Query, bytes: bytes::Bytes| {
+    //         let da = server2.input(query, bytes);
+    //         println!("{:?}", da);
+    //         String::new()
+    //     });
+    //
+    // let wechat = warp::path!("wechat").and(
+    //     warp::get().and(signature)
+    //     .or(warp::post().and(message))
+/*     ) */;
 
-    let wechat = warp::path!("wechat").and(
-        warp::get().and(signature)
-        .or(warp::post().and(message))
-    );
 
-
-    warp::serve(wechat)
+    warp::serve(signature)
         .run(([127, 0, 0, 1], 3030))
         .await;
 }

@@ -16,6 +16,7 @@ pub enum Error {
     CryptoAESBlockError(block_modes::BlockModeError),
     XMLParseError(quick_xml::DeError),
     JsonParseError(serde_json::Error),
+    UnsupportMessageType,
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
